@@ -1,9 +1,6 @@
 require_relative 'game.rb'
 require_relative 'dict.rb'
 
-Dict.generate_list('dict/english_words_basic.txt')
-game = Game.new()
+require_relative 'menu'
 
-puts game.secret_word
-
-game.save("test")
+Menu.opening_screen
