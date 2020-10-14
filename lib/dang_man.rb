@@ -3,4 +3,6 @@ require_relative 'dict.rb'
 
 require_relative 'menu'
 
+
+
 Menu.opening_screen

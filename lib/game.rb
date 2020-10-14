@@ -1,16 +1,18 @@
 require 'json'
 require 'date'
-require_relative 'dict.rb'
+require_relative 'dict'
 
+# Handles game state: saving, loading, reading saves, and creating new games.
 class Game
+  attr_reader :secret_word, :indices_revealed, :strikes_remaining
 
-  def initialize()
-    @secret_word = Dict.list[rand(0..Dict.list.length)]
-    @indices_revealed = []
-    @strikes_remaining = 5
+  def initialize(secret_word, indices_revealed = [], strikes_remaining = 5)
+    @secret_word = secret_word
+    @indices_revealed = indices_revealed
+    @strikes_remaining = strikes_remaining
   end
 
-  def save(filename)
+  def save_game(filename)
     time = DateTime.now
     timestamp = time.strftime('%m/%d/%Y %H:%M:%S')
 
@@ -27,16 +29,23 @@ class Game
     end
   end
 
-  def secret_word
-    @secret_word
+  def self.load_game(filename)
+    save_state = JSON.parse("/saves/#{filename}")
+
+    game = Game.new(
+      save_state['secret_word'],
+      save_state['indices_revealed'],
+      save_state['strikes_remaining']
+    )
+
+    Play.play_game(game)
   end
 
-  def indices_revealed
-    @indices_revealed
-  end
-
-  def strikes_remaining
-    @strikes_remaining
+  # Returns array of saved games, sorted by date modified, newest first
+  def self.read_saves
+    Dir.glob('/saves/*.json').sort_by do |a, b|
+      File.mtime(b) <=> file.mtime(a)
+    end
   end
 
 end
