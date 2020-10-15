@@ -1,6 +1,7 @@
+# Handles errors and redirects accordingly
 class Error
-
   def self.print_header
+    system('clear') || system('cls')
     puts '##############'
     puts '#   ERROR!   #'
     puts '##############'
@@ -12,7 +13,7 @@ class Error
     puts 'You broke something!'
     puts 'Press any key to restart.'
     gets
-    Menu.opening_screen
+    Menu.main_menu
   end
 
   def self.corrupted_save
@@ -20,5 +21,14 @@ class Error
     puts 'ERR: Save file corrupted.'
     puts 'Press any key to restart.'
     gets
-    Menu.opening_screen
+    Menu.main_menu
+  end
+
+  def self.hax
+    Error.print_header
+    puts 'ERR: Nice try, hackers!'
+    puts 'Press any key to restart.'
+    gets
+    Menu.main_menu
+  end
 end

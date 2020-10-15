@@ -5,4 +5,4 @@ require_relative 'menu'
 
 
 
-Menu.opening_screen
+Menu.main_menu
