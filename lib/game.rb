@@ -21,16 +21,18 @@ class Game
 
   def redacted_secret_word
     secret_word_array = @secret_word.split('')
+    redacted_word = ''
 
-    secret_word_array.each do |letter, index|
+    secret_word_array.each_with_index do |letter, index|
+      redacted_word += ' '
       if @indices_revealed.include?(index)
-        print letter.upcase
+        redacted_word += letter.upcase
       else
-        print '_'
+        redacted_word += '_'
       end
     end
 
-    secret_word_array.join
+    redacted_word
   end
 
   def make_guess(guess)
@@ -39,7 +41,7 @@ class Game
     secret_word_array = @secret_word.split('')
 
     secret_word_array.each_with_index do |letter, index|
-      if letter == guess && !indices_revealed.include?(index)
+      if letter == guess && !@indices_revealed.include?(index)
         @indices_revealed.push(index)
         guess_found = true
       end
@@ -47,7 +49,7 @@ class Game
 
     @strikes_remaining -= 1 unless guess_found;
 
-    @letters_remaining.gsub!(guess, '_')
+    @letters_remaining[letters_remaining.index(guess)] = '_' if letters_remaining.index(guess)
   end
 
   def check_game_status
@@ -60,19 +62,19 @@ class Game
 
   def reveal_secret_word
     if @strikes_remaining.zero? || @indices_revealed.length == @secret_word.length
-      @secret_word
+      @secret_word.split('').unshift('').join(' ')
     else
       Error.hax
     end
   end
 
   def save_game(filename)
-    time = DateTime.now
-    timestamp = time.strftime('%m/%d/%Y %H:%M:%S')
+    # time = DateTime.now
+    # timestamp = time.strftime('%m\/%d\/%Y %H:%M:%S')
 
     save_state = {
       'name' => filename,
-      'timestamp' => timestamp,
+      # 'timestamp' => timestamp,
       'secret_word' => @secret_word,
       'indices_revealed' => @indices_revealed,
       'strikes_remaining' => @strikes_remaining,
@@ -85,7 +87,8 @@ class Game
   end
 
   def self.load_game(filename)
-    save_state = JSON.parse("/saves/#{filename}")
+    file = File.read("saves/#{filename}")
+    save_state = JSON.parse(file)
 
     game = Game.new(
       save_state['secret_word'],
@@ -94,14 +97,12 @@ class Game
       save_state['letters_remaining']
     )
 
-    Play.play_game(game, filename)
+    Play.play_game(game)
   end
 
-  # Returns array of saved games, sorted by date modified, newest first
+  # Returns array of saved games
   def self.read_saves
-    Dir.glob('/saves/*.json').sort_by do |a, b|
-      File.mtime(b) <=> file.mtime(a)
-    end
+    Dir.glob('saves/*.json').map { |filename| File.basename(filename)}
   end
 
 end

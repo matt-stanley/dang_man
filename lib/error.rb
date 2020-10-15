@@ -11,7 +11,7 @@ class Error
   def self.broke
     Error.print_header
     puts 'You broke something!'
-    puts 'Press any key to restart.'
+    puts 'Press Enter to restart.'
     gets
     Menu.main_menu
   end
@@ -19,7 +19,7 @@ class Error
   def self.corrupted_save
     Error.print_header
     puts 'ERR: Save file corrupted.'
-    puts 'Press any key to restart.'
+    puts 'Press Enter to restart.'
     gets
     Menu.main_menu
   end
@@ -27,7 +27,7 @@ class Error
   def self.hax
     Error.print_header
     puts 'ERR: Nice try, hackers!'
-    puts 'Press any key to restart.'
+    puts 'Press Enter to restart.'
     gets
     Menu.main_menu
   end

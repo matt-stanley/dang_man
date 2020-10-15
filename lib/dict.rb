@@ -9,11 +9,17 @@ class Dict
   #   end
   # end
 
-  def self.random_word(list)
-    list[rand(0..Dict.list.length)]
+  def self.random_word(file)
+    list = []
+    File.foreach("dict/#{file}") do |line|
+      list.push(line.chomp.upcase) if line.chomp.length >= 3;
+    end
+    list[rand(0..list.length)]
   end
 
   def self.available_lists
-    Dir.glob('/dict/*.txt')
+    Dir.glob('dict/*.txt').map do |file|
+      File.basename(file)
+    end
   end
 end

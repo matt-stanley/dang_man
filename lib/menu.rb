@@ -19,11 +19,12 @@ class Menu
     puts "Choose an option by typing a number:\n"
     puts '1. Start a new game'
     puts "2. Load a saved game\n"
+    print "\nChoice: "
     option = gets.chomp
 
     case option
     when '1'
-      Play.start_game(nil)
+      Menu.choose_list
     when '2'
       Menu.load_game_menu
     else
@@ -44,9 +45,10 @@ class Menu
       choice_num += 1
     end
 
-    choice = gets.chomp
+    print "\nChoice: "
+    choice = gets.chomp.to_i
 
-    if choice == '0'
+    if choice == 0
       Menu.main_menu
     elsif dict_list[choice - 1]
       list = dict_list[choice - 1]
@@ -56,12 +58,25 @@ class Menu
     end
   end
 
+  def self.save_game_menu(game)
+    Menu.print_header
+    puts 'Name your save file'
+    print "\nName: "
+    filename = gets.chomp
+    game.save_game(filename)
+
+    puts "Game saved as #{filename}\n"
+    puts 'Press any button to return to the main menu'
+    gets
+    Menu.main_menu
+  end
 
   def self.load_game_menu
     Menu.print_header
-    puts "Choose a saved game by typing its ID, or 0 to return to the main menu:\n"
+    puts "Choose a saved game by typing its ID, or 0 to return to the main menu:\n\n"
 
     saved_games = Game.read_saves
+    puts saved_games
 
     choice_num = 1
     saved_games.each do |filename|
@@ -70,9 +85,10 @@ class Menu
       choice_num += 1
     end
 
-    choice = gets.chomp
+    print "\nChoice: "
+    choice = gets.chomp.to_i
 
-    if choice == '0'
+    if choice == 0
       Menu.main_menu
     elsif saved_games[choice - 1]
       game = Game.load_game(saved_games[choice - 1])
