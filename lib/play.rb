@@ -44,6 +44,11 @@ class Play
     puts game.redacted_secret_word
   end
 
+  def self.reveal_secret_word
+    puts 'The Secret Word was'
+    puts game.reveal_secret_word
+  end
+
   def self.print_strikes
     print 'Strikes: ['
 
@@ -61,4 +66,39 @@ class Play
       print "\n" if (index % 13).zero?
     end
   end
+
+  def game_over
+    Menu.print_header
+    puts 'Dang, Man!'
+    puts 'Better luck next time!'
+    Play.reveal_secret_word
+    puts "\n"
+    Play.print_strikes
+    puts "\n"
+    Play.print_letters_remaining
+    puts "\n"
+
+    puts "Press any key to return to the Main Menu"
+    gets
+
+    Menu.main_menu
+  end
+
+  def game_won
+    Menu.print_header
+    puts 'Great job, dude!'
+    puts 'You win!'
+    Play.reveal_secret_word
+    puts "\n"
+    Play.print_strikes
+    puts "\n"
+    Play.print_letters_remaining
+    puts "\n"
+
+    puts "Press any key to return to the Main Menu"
+    gets
+
+    Menu.main_menu
+  end
+    
 end
